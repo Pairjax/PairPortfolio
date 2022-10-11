@@ -2,6 +2,10 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()
+        .insert_resource(WindowDescriptor {
+            fit_canvas_to_parent: true,
+            ..default()
+        })
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup)
         .run();
@@ -9,12 +13,10 @@ fn main() {
 
 fn setup(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
     asset_server: Res<AssetServer>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     // plane
-    commands.spawn_bundle(PbrBundle {
+    /*commands.spawn_bundle(PbrBundle {
         mesh: meshes.add(Mesh::from(shape::Plane { size: 5.0 })),
         material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
         ..default()
@@ -25,7 +27,7 @@ fn setup(
         material: materials.add(Color::rgb(0.8, 0.7, 0.6).into()),
         transform: Transform::from_xyz(0.0, 0.5, 0.0),
         ..default()
-    });
+    });*/
     // light
     commands.spawn_bundle(PointLightBundle {
         point_light: PointLight {
@@ -42,10 +44,11 @@ fn setup(
         ..default()
     });
 
-    let ghibli = asset_server.load("assets/Hotel/ghibli.glb#Scene0");
+    let ghibli = asset_server.load("House/scene.gltf#Scene0");
 
     commands.spawn_bundle(SceneBundle {
         scene: ghibli,
-        ..Default::default()
+        transform: Transform::from_scale(Vec3{ x: 20.0, y: 20.0, z: 20.0 }),
+        ..default()
     });
 }
